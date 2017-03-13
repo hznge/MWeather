@@ -2,9 +2,11 @@ package com.hznge.mweather.util;
 
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
 import com.hznge.mweather.db.City;
 import com.hznge.mweather.db.County;
 import com.hznge.mweather.db.Province;
+import com.hznge.mweather.gson.Weather;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -82,5 +84,19 @@ public class Utility {
         }
 
         return false;
+    }
+
+    // Parse the json to Weather Class
+    public static Weather handleWeatherResponse(String response) {
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            JSONArray jsonArray = jsonObject.getJSONArray("HeWeather");
+            String weatherContent = jsonArray.getJSONObject(0).toString();
+            return new Gson().fromJson(weatherContent, Weather.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }
