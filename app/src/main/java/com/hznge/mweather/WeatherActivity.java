@@ -146,7 +146,7 @@ public class WeatherActivity extends AppCompatActivity {
         }
 
         if (weather.aqi != null) {
-            aqiText.setText(weather.aqi.city.api);
+            aqiText.setText(weather.aqi.city.aqi);
             pm25Text.setText(weather.aqi.city.pm25);
         }
 
