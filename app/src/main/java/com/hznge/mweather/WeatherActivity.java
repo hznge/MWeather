@@ -111,6 +111,8 @@ public class WeatherActivity extends AppCompatActivity {
     }
 
     private void showWeatherInfo(Weather weather) {
+        // TODO: Fixed sample Bug while some Error...
+
         String cityName = weather.mBasic.cityName;
         String updateTime = weather.mBasic.mUpdate.updateTime.split(" ")[1];
         String degree = weather.mNow.temperature + "°";
