@@ -46,6 +46,8 @@ public class WeatherActivity extends AppCompatActivity {
 
     private TextView sportText;
 
+    private String mWeatherId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,12 +61,13 @@ public class WeatherActivity extends AppCompatActivity {
         if (weatherStr != null) {
             // if cached then parse it
             Weather weather = Utility.handleWeatherResponse(weatherStr);
+            mWeatherId = weather.basic.weatherId;
             showWeatherInfo(weather);
         } else {
             // If no cached then parse from server
-            String weatherId = getIntent().getStringExtra("weather_id");
+            mWeatherId = getIntent().getStringExtra("weather_id");
             weatherLayout.setVisibility(View.INVISIBLE);
-            requestWeather(weatherId);
+            requestWeather(mWeatherId);
         }
     }
 
@@ -99,6 +102,7 @@ public class WeatherActivity extends AppCompatActivity {
                                     .getDefaultSharedPreferences(WeatherActivity.this).edit();
                             editor.putString("weather", responseText);
                             editor.apply();
+                            mWeatherId = weather.basic.weatherId;
                             showWeatherInfo(weather);
                         } else {
                             Toast.makeText(WeatherActivity.this, "Load Weather Info Failed",
@@ -113,10 +117,10 @@ public class WeatherActivity extends AppCompatActivity {
     private void showWeatherInfo(Weather weather) {
         // TODO: Fixed sample Bug while some Error...
 
-        String cityName = weather.mBasic.cityName;
-        String updateTime = weather.mBasic.mUpdate.updateTime.split(" ")[1];
-        String degree = weather.mNow.temperature + "°";
-        String weatherInfo = weather.mNow.more.info;
+        String cityName = weather.basic.cityName;
+        String updateTime = weather.basic.update.updateTime.split(" ")[1];
+        String degree = weather.now.temperature + "°";
+        String weatherInfo = weather.now.more.info;
         
         titleCity.setText(cityName);
         titleUpdateTime.setText(updateTime);
@@ -126,29 +130,29 @@ public class WeatherActivity extends AppCompatActivity {
         forecastLayout.removeAllViews();
 
         for (Forecast forecast :
-                weather.mForecastList) {
+                weather.forecastList) {
             View view = LayoutInflater.from(this).inflate(R.layout.forecast_item, forecastLayout, false);
-            TextView dateText = (TextView) findViewById(R.id.date_text);
-            TextView infoText = (TextView) findViewById(R.id.info_text);
-            TextView maxText = (TextView) findViewById(R.id.max_text);
-            TextView minText = (TextView) findViewById(R.id.min_text);
+            TextView dateText = (TextView) view.findViewById(R.id.date_text);
+            TextView infoText = (TextView) view.findViewById(R.id.info_text);
+            TextView maxText = (TextView) view.findViewById(R.id.max_text);
+            TextView minText = (TextView) view.findViewById(R.id.min_text);
 
             dateText.setText(forecast.date);
-            infoText.setText(forecast.mMore.info);
-            maxText.setText(forecast.mTemperature.max);
-            minText.setText(forecast.mTemperature.min);
+            infoText.setText(forecast.more.info);
+            maxText.setText(forecast.temperature.max);
+            minText.setText(forecast.temperature.min);
 
             forecastLayout.addView(view);
         }
 
-        if (weather.mAQI != null) {
-            aqiText.setText(weather.mAQI.mCity.api);
-            pm25Text.setText(weather.mAQI.mCity.pm25);
+        if (weather.aqi != null) {
+            aqiText.setText(weather.aqi.city.api);
+            pm25Text.setText(weather.aqi.city.pm25);
         }
 
-        String comfort = "舒适度： " + weather.mSuggestion.mComfort.info;
-        String carWash = "洗车指数：" + weather.mSuggestion.mCarWash.info;
-        String sport = "运动建议：" + weather.mSuggestion.mSport.info;
+        String comfort = "舒适度： " + weather.suggestion.comfort.info;
+        String carWash = "洗车指数：" + weather.suggestion.carWash.info;
+        String sport = "运动建议：" + weather.suggestion.sport.info;
 
         comfortText.setText(comfort);
         carWashText.setText(carWash);

@@ -64,8 +64,6 @@ public class ChooseFragment extends Fragment {
 
     private City selectedCity;
 
-    private County selectedCounty;
-
     private int currentLevel;
 
     @Nullable

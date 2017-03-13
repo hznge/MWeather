@@ -12,15 +12,15 @@ public class Weather {
 
     public String status;
 
-    public Basic mBasic;
+    public Basic basic;
 
-    public AQI mAQI;
+    public AQI aqi;
 
-    public Now mNow;
+    public Now now;
 
-    public Suggestion mSuggestion;
+    public Suggestion suggestion;
 
     @SerializedName("daily_forecast")
-    public List<Forecast> mForecastList;
+    public List<Forecast> forecastList;
 
 }
